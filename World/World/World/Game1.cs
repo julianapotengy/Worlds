@@ -18,7 +18,13 @@ namespace World
 
         _Screen screen;
         _Camera camera;
-        _Walls triangle;
+        _Grass grass;
+        _Walls walls;
+        _FrontDoor frontDoor;
+        _BackDoor backDoor;
+        _SliderWindow sliderWindow;
+        _OpenWindow openWindow;
+        _Roof roof;
 
         public Game1()
         {
@@ -36,7 +42,15 @@ namespace World
 
             this.camera = new _Camera();
 
-            this.triangle = new _Walls(GraphicsDevice);
+            this.grass = new _Grass(GraphicsDevice);
+            this.walls = new _Walls(GraphicsDevice);
+            this.frontDoor = new _FrontDoor(GraphicsDevice);
+            this.backDoor = new _BackDoor(GraphicsDevice);
+            this.sliderWindow = new _SliderWindow(GraphicsDevice);
+            this.openWindow = new _OpenWindow(GraphicsDevice);
+            this.roof = new _Roof(GraphicsDevice);
+
+            GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             base.Initialize();
         }
@@ -56,6 +70,8 @@ namespace World
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            this.camera.Update(gameTime);
+
             base.Update(gameTime);
         }
         
@@ -63,12 +79,18 @@ namespace World
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            this.triangle.Draw(this.camera);
+            this.grass.Draw(this.camera);
+            this.walls.Draw(this.camera);
+            this.frontDoor.Draw(this.camera);
+            this.backDoor.Draw(this.camera);
+            this.sliderWindow.Draw(this.camera);
+            this.openWindow.Draw(this.camera);
+            this.roof.Draw(this.camera);
 
-            RasterizerState rs = new RasterizerState();
+            /*RasterizerState rs = new RasterizerState();
             rs.CullMode = CullMode.None;
             rs.FillMode = FillMode.WireFrame;
-            GraphicsDevice.RasterizerState = rs;
+            GraphicsDevice.RasterizerState = rs;*/
 
             base.Draw(gameTime);
         }

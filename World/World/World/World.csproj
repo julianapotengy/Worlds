@@ -74,8 +74,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="_BackDoor.cs" />
     <Compile Include="_Camera.cs" />
+    <Compile Include="_FrontDoor.cs" />
+    <Compile Include="_OpenWindow.cs" />
+    <Compile Include="_Roof.cs" />
     <Compile Include="_Screen.cs" />
+    <Compile Include="_Grass.cs" />
+    <Compile Include="_SliderWindow.cs" />
     <Compile Include="_Walls.cs" />
   </ItemGroup>
   <ItemGroup>

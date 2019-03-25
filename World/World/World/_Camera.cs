@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace World
 {
@@ -16,11 +17,18 @@ namespace World
         private Vector3 target;
         private Vector3 up;
 
+        float speed;
+        float angleY;
+        float speedY;
+
         public _Camera()
         {
-            this.position = Vector3.Backward * 5;
-            this.target = Vector3.Zero;
+            this.position = new Vector3(0f,2f,11f);
+            this.target = Vector3.Up;
             this.up = Vector3.Up;
+            speed = 20;
+            angleY = 0;
+            speedY = 100;
             this.SetupView(this.position, this.target, this.up);
 
             this.SetupProjection();
@@ -36,7 +44,7 @@ namespace World
             _Screen screen = _Screen.GetInstance();
 
             this.projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 
-                                                                  screen.GetWidth() / (float)screen.GetHeight(), 0.0000001f, 1000);
+                                                                  screen.GetWidth() / (float)screen.GetHeight(), 0.001f, 1000);
         }
 
         public Matrix GetView()
@@ -47,6 +55,33 @@ namespace World
         public Matrix GetProjection()
         {
             return this.projection;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            this.Translation(gameTime);
+
+            this.view = Matrix.Identity;
+            this.view *= Matrix.CreateRotationY(MathHelper.ToRadians(this.angleY));
+            this.view *= Matrix.CreateTranslation(this.position);
+            this.view = Matrix.Invert(this.view);
+        }
+
+        private void Translation(GameTime gameTime)
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                this.position.X += (float)Math.Sin(MathHelper.ToRadians(this.angleY + 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speed;
+                this.position.Z += (float)Math.Cos(MathHelper.ToRadians(this.angleY + 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speed;
+                this.angleY += this.speedY * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
+
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                this.position.X += (float)Math.Sin(MathHelper.ToRadians(this.angleY - 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speed;
+                this.position.Z += (float)Math.Cos(MathHelper.ToRadians(this.angleY - 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speed;
+                this.angleY -= this.speedY * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
+            }
         }
     }
 }
