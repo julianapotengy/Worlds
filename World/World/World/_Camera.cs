@@ -23,7 +23,7 @@ namespace World
 
         public _Camera()
         {
-            this.position = new Vector3(0f,2f,11f);
+            this.position = new Vector3(0f,5f,20f);
             this.target = Vector3.Up;
             this.up = Vector3.Up;
             speed = 20;
@@ -73,14 +73,14 @@ namespace World
             {
                 this.position.X += (float)Math.Sin(MathHelper.ToRadians(this.angleY + 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speed;
                 this.position.Z += (float)Math.Cos(MathHelper.ToRadians(this.angleY + 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speed;
-                this.angleY += this.speedY * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
+                //this.angleY += this.speedY * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
 
             }
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 this.position.X += (float)Math.Sin(MathHelper.ToRadians(this.angleY - 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speed;
                 this.position.Z += (float)Math.Cos(MathHelper.ToRadians(this.angleY - 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speed;
-                this.angleY -= this.speedY * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
+                //this.angleY -= this.speedY * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
             }
         }
     }

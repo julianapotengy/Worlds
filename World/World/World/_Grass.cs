@@ -17,31 +17,38 @@ namespace World
         BasicEffect effect;
         Color grassColor;
 
-        public _Grass(GraphicsDevice device)
+        protected Vector3 position;
+        private float angle;
+
+        public _Grass(GraphicsDevice device, Vector3 position, float angle)
         {
             this.device = device;
             this.world = Matrix.Identity;
-            grassColor = Color.Green;
+            this.grassColor = Color.Green;
+            this.position = position;
+            this.angle = angle;
 
             this.verts = new VertexPositionColor[]
             {
                 // grass
-                new VertexPositionColor(new Vector3(-5, 0,-5),grassColor),   //v0
-                new VertexPositionColor(new Vector3(5,0,5),grassColor), //v1
-                new VertexPositionColor(new Vector3(-5,0,5),grassColor),  //v2
+                new VertexPositionColor(new Vector3(-20, 0,-20),grassColor),   //v0
+                new VertexPositionColor(new Vector3(20,0,20),grassColor), //v1
+                new VertexPositionColor(new Vector3(-20,0,20),grassColor),  //v2
                 
-                new VertexPositionColor(new Vector3(5,0,-5),grassColor),   //v0
-                new VertexPositionColor(new Vector3(5,0,5),grassColor), //v1
-                new VertexPositionColor(new Vector3(-5,0,-5),grassColor),  //v2
+                new VertexPositionColor(new Vector3(20,0,-20),grassColor),   //v0
+                new VertexPositionColor(new Vector3(20,0,20),grassColor), //v1
+                new VertexPositionColor(new Vector3(-20,0,-20),grassColor),  //v2
             };
 
             this.buffer = new VertexBuffer(this.device, typeof(VertexPositionColor), this.verts.Length, BufferUsage.None);
             this.effect = new BasicEffect(this.device);
         }
 
-        public VertexPositionColor MakeTriangle(Vector3 pos, Color color)
+        public void Update(GameTime gameTime)
         {
-            return new VertexPositionColor(pos, color);
+            this.world = Matrix.Identity;
+            this.world *= Matrix.CreateRotationY(angle);
+            this.world *= Matrix.CreateTranslation(this.position);
         }
 
         public void Draw(_Camera camera)

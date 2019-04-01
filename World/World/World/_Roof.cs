@@ -17,11 +17,16 @@ namespace World
         BasicEffect effect;
         Color roofColor;
 
-        public _Roof(GraphicsDevice device)
+        protected Vector3 position;
+        private float angle;
+
+        public _Roof(GraphicsDevice device, Vector3 position, float angle)
         {
             this.device = device;
             this.world = Matrix.Identity;
-            roofColor = Color.SaddleBrown;
+            this.roofColor = Color.SaddleBrown;
+            this.position = position;
+            this.angle = angle;
 
             this.verts = new VertexPositionColor[]
             {
@@ -79,9 +84,11 @@ namespace World
             this.effect = new BasicEffect(this.device);
         }
 
-        public VertexPositionColor MakeTriangle(Vector3 pos, Color color)
+        public void Update(GameTime gameTime)
         {
-            return new VertexPositionColor(pos, color);
+            this.world = Matrix.Identity;
+            this.world *= Matrix.CreateRotationY(angle);
+            this.world *= Matrix.CreateTranslation(this.position);
         }
 
         public void Draw(_Camera camera)

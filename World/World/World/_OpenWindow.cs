@@ -17,11 +17,16 @@ namespace World
         BasicEffect effect;
         Color windowColor;
 
-        public _OpenWindow(GraphicsDevice device)
+        protected Vector3 position;
+        private float angle;
+
+        public _OpenWindow(GraphicsDevice device, Vector3 position, float angle)
         {
             this.device = device;
             this.world = Matrix.Identity;
-            windowColor = Color.SandyBrown;
+            this.windowColor = Color.SandyBrown;
+            this.position = position;
+            this.angle = angle;
 
             this.verts = new VertexPositionColor[]
             {
@@ -34,7 +39,7 @@ namespace World
                 new VertexPositionColor(new Vector3(-2f,1.5f,-2f),windowColor), //v1
                 new VertexPositionColor(new Vector3(-2f,3f,-2f),windowColor),  //v2
 
-                // esquerda - 1
+                // esquerda - 2
                 new VertexPositionColor(new Vector3(-2f,3,0f),windowColor),   //v0
                 new VertexPositionColor(new Vector3(-2f,1.5f,-1f),windowColor), //v1
                 new VertexPositionColor(new Vector3(-2f,3f,-1f),windowColor),  //v2
@@ -52,7 +57,7 @@ namespace World
                 new VertexPositionColor(new Vector3(2f,1.5f,-2f),windowColor), //v1
                 new VertexPositionColor(new Vector3(2f,3f,-2f),windowColor),  //v2
 
-                // direita - 1
+                // direita - 2
                 new VertexPositionColor(new Vector3(2f,3,0f),windowColor),   //v0
                 new VertexPositionColor(new Vector3(2f,1.5f,-1f),windowColor), //v1
                 new VertexPositionColor(new Vector3(2f,3f,-1f),windowColor),  //v2
@@ -66,9 +71,11 @@ namespace World
             this.effect = new BasicEffect(this.device);
         }
 
-        public VertexPositionColor MakeTriangle(Vector3 pos, Color color)
+        public void Update(GameTime gameTime)
         {
-            return new VertexPositionColor(pos, color);
+            this.world = Matrix.Identity;
+            this.world *= Matrix.CreateRotationY(angle);
+            this.world *= Matrix.CreateTranslation(this.position);
         }
 
         public void Draw(_Camera camera)
