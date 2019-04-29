@@ -17,6 +17,7 @@ namespace World
         private Vector3 target;
         private Vector3 up;
 
+        Vector3 rotation;
         float speedT, speedR;
         float angle;
 
@@ -28,6 +29,7 @@ namespace World
             this.speedT = 20;
             this.speedR = 60;
             this.angle = 0;
+            this.rotation = new Vector3(-15, 0, 0);
 
             this.SetupView(this.position, this.target, this.up);
 
@@ -63,7 +65,8 @@ namespace World
             this.Rotation(gameTime);
 
             this.view = Matrix.Identity;
-            this.view *= Matrix.CreateRotationY(MathHelper.ToRadians(this.angle));
+            this.view *= Matrix.CreateRotationX(MathHelper.ToRadians(rotation.X));
+            this.view *= Matrix.CreateRotationY(MathHelper.ToRadians(rotation.Y));
             this.view *= Matrix.CreateTranslation(this.position);
             this.view = Matrix.Invert(this.view);
         }
@@ -72,26 +75,26 @@ namespace World
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                this.angle += this.speedR * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
+                this.rotation.Y += this.speedR * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                this.angle -= this.speedR * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
+                this.rotation.Y -= this.speedR * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                this.rotation.X += this.speedR * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                this.rotation.X -= this.speedR * gameTime.ElapsedGameTime.Milliseconds * 0.001f;
             }
         }
 
         private void Translation(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                this.position.Y += gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                this.position.Y -= gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
-            }
-
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 this.position.X -= (float)Math.Sin(MathHelper.ToRadians(this.angle)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
