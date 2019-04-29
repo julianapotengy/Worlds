@@ -35,6 +35,7 @@ namespace World
 
         Vector3 housePos, grassPos, moinho1Pos, moinho2Pos, helice1Pos, helice2Pos;
         float moinho1Angle, moinho2Angle;
+        Texture2D grassTexture, grayPaintTexture, redPaintTexture, woodTexture;
 
         public Game1()
         {
@@ -62,15 +63,10 @@ namespace World
 
             this.camera = new _Camera();
 
-            this.grass = new _Grass(GraphicsDevice, grassPos, 0);
-            this.walls = new _Walls(GraphicsDevice, housePos, 0);
-            this.frontDoor = new _FrontDoor(GraphicsDevice, housePos, 0);
-            this.backDoor = new _BackDoor(GraphicsDevice, housePos, 0);
-            this.sliderWindow = new _SliderWindow(GraphicsDevice, housePos, 0);
-            this.openWindow = new _OpenWindow(GraphicsDevice, housePos, 0);
-            this.roof = new _Roof(GraphicsDevice, housePos, 0);
-            this.moinho1 = new _Moinhos(GraphicsDevice, moinho1Pos, moinho1Angle);
-            this.moinho2 = new _Moinhos(GraphicsDevice, moinho2Pos, moinho2Angle);
+            this.grassTexture = Content.Load<Texture2D>(@"Textures\grass-texture");
+            this.grayPaintTexture = Content.Load<Texture2D>(@"Textures\gray-paint-texture");
+            this.redPaintTexture = Content.Load<Texture2D>(@"Textures\red-paint-texture");
+            this.woodTexture = Content.Load<Texture2D>(@"Textures\wood-texture");
 
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
@@ -81,8 +77,18 @@ namespace World
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            this.heliceList.Add(new _Helice(GraphicsDevice, helice1Pos, moinho1Angle));
-            this.heliceList.Add(new _Helice(GraphicsDevice, helice2Pos, moinho2Angle));
+            this.grass = new _Grass(GraphicsDevice, grassPos, 0, grassTexture);
+            this.walls = new _Walls(GraphicsDevice, housePos, 0, grayPaintTexture);
+            this.frontDoor = new _FrontDoor(GraphicsDevice, housePos, 0, woodTexture);
+            this.backDoor = new _BackDoor(GraphicsDevice, housePos, 0, woodTexture);
+            this.sliderWindow = new _SliderWindow(GraphicsDevice, housePos, 0, woodTexture);
+            this.openWindow = new _OpenWindow(GraphicsDevice, housePos, 0, woodTexture);
+            this.roof = new _Roof(GraphicsDevice, housePos, 0, woodTexture);
+            this.moinho1 = new _Moinhos(GraphicsDevice, moinho1Pos, moinho1Angle, redPaintTexture);
+            this.moinho2 = new _Moinhos(GraphicsDevice, moinho2Pos, moinho2Angle, redPaintTexture);
+
+            this.heliceList.Add(new _Helice(GraphicsDevice, helice1Pos, moinho1Angle, woodTexture));
+            this.heliceList.Add(new _Helice(GraphicsDevice, helice2Pos, moinho2Angle, woodTexture));
         }
         
         protected override void UnloadContent()
@@ -117,6 +123,7 @@ namespace World
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
 
             this.grass.Draw(this.camera);
             this.walls.Draw(this.camera);
@@ -133,10 +140,10 @@ namespace World
                 h.Draw(ref this.camera);
             }
 
-            RasterizerState rs = new RasterizerState();
+            /*RasterizerState rs = new RasterizerState();
             rs.CullMode = CullMode.None;
             rs.FillMode = FillMode.WireFrame;
-            GraphicsDevice.RasterizerState = rs;
+            GraphicsDevice.RasterizerState = rs;*/
 
             base.Draw(gameTime);
         }

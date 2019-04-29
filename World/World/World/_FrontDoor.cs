@@ -12,35 +12,39 @@ namespace World
     {
         GraphicsDevice device;
         Matrix world;
-        VertexPositionColor[] verts;
+        //VertexPositionColor[] verts;
+        VertexPositionTexture[] verts;
         VertexBuffer buffer;
         BasicEffect effect;
         Color doorColor;
 
         protected Vector3 position;
         private float angle;
+        Texture2D texture;
 
-        public _FrontDoor(GraphicsDevice device, Vector3 position, float angle)
+        public _FrontDoor(GraphicsDevice device, Vector3 position, float angle, Texture2D texture)
         {
             this.device = device;
             this.world = Matrix.Identity;
             this.doorColor = Color.SaddleBrown;
             this.position = position;
             this.angle = angle;
+            this.texture = texture;
 
-            this.verts = new VertexPositionColor[]
+            this.verts = new VertexPositionTexture[]
             {
                 // front door
-                new VertexPositionColor(new Vector3(-0.7f,0,3f),doorColor),   //v0
-                new VertexPositionColor(new Vector3(-0.7f,3,3f),doorColor), //v1
-                new VertexPositionColor(new Vector3(0.7f,3,3f),doorColor),  //v2
+                new VertexPositionTexture(new Vector3(-0.7f,0,3f),new Vector2(0, 1)),   //v0
+                new VertexPositionTexture(new Vector3(-0.7f,3,3f),new Vector2(1, 0)), //v1
+                new VertexPositionTexture(new Vector3(0.7f,3,3f),new Vector2(0, 0)),  //v2
 
-                new VertexPositionColor(new Vector3(-0.7f,0,3f),doorColor),   //v0
-                new VertexPositionColor(new Vector3(0.7f,0,3f),doorColor), //v1
-                new VertexPositionColor(new Vector3(0.7f,3,3f),doorColor),  //v2
+                new VertexPositionTexture(new Vector3(-0.7f,0,3f),new Vector2(0, 1)),   //v0
+                new VertexPositionTexture(new Vector3(0.7f,0,3f),new Vector2(1, 0)), //v1
+                new VertexPositionTexture(new Vector3(0.7f,3,3f),new Vector2(0, 0)),  //v2
             };
 
-            this.buffer = new VertexBuffer(this.device, typeof(VertexPositionColor), this.verts.Length, BufferUsage.None);
+            this.buffer = new VertexBuffer(this.device, typeof(VertexPositionTexture), this.verts.Length, BufferUsage.None);
+            this.buffer.SetData<VertexPositionTexture>(this.verts);
             this.effect = new BasicEffect(this.device);
         }
 
@@ -58,12 +62,13 @@ namespace World
             this.effect.World = this.world;
             this.effect.View = camera.GetView();
             this.effect.Projection = camera.GetProjection();
-            this.effect.VertexColorEnabled = true;
+            this.effect.TextureEnabled = true;
+            this.effect.Texture = texture;
 
             foreach (EffectPass pass in this.effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                this.device.DrawUserPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, this.verts, 0, this.verts.Length / 3);
+                this.device.DrawUserPrimitives<VertexPositionTexture>(PrimitiveType.TriangleList, this.verts, 0, this.verts.Length / 3);
             }
         }
     }
