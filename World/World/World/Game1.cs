@@ -27,8 +27,6 @@ namespace World
         _Roof roof;
         _Moinhos moinho1;
         _Moinhos moinho2;
-        // _Helice helice1;
-        // _Helice helice2;
 
         List<_Helice> heliceList = new List<_Helice>();
         List<_Moinhos> moinhoList = new List<_Moinhos>();
@@ -36,6 +34,9 @@ namespace World
         Vector3 housePos, grassPos, moinho1Pos, moinho2Pos, helice1Pos, helice2Pos;
         float moinho1Angle, moinho2Angle;
         Texture2D grassTexture, grayPaintTexture, redPaintTexture, woodTexture;
+
+        Effect snowEffect;
+        float counter, time, add;
 
         public Game1()
         {
@@ -68,6 +69,9 @@ namespace World
             this.redPaintTexture = Content.Load<Texture2D>(@"Textures\red-paint-texture");
             this.woodTexture = Content.Load<Texture2D>(@"Textures\wood-texture");
 
+            this.snowEffect = Content.Load<Effect>(@"Effects\snow-effect");
+            add = 0.001f;
+
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             base.Initialize();
@@ -77,18 +81,18 @@ namespace World
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            this.grass = new _Grass(GraphicsDevice, grassPos, 0, grassTexture);
-            this.walls = new _Walls(GraphicsDevice, housePos, 0, grayPaintTexture);
-            this.frontDoor = new _FrontDoor(GraphicsDevice, housePos, 0, woodTexture);
-            this.backDoor = new _BackDoor(GraphicsDevice, housePos, 0, woodTexture);
-            this.sliderWindow = new _SliderWindow(GraphicsDevice, housePos, 0, woodTexture);
-            this.openWindow = new _OpenWindow(GraphicsDevice, housePos, 0, woodTexture);
-            this.roof = new _Roof(GraphicsDevice, housePos, 0, woodTexture);
-            this.moinho1 = new _Moinhos(GraphicsDevice, moinho1Pos, moinho1Angle, redPaintTexture);
-            this.moinho2 = new _Moinhos(GraphicsDevice, moinho2Pos, moinho2Angle, redPaintTexture);
+            this.grass = new _Grass(GraphicsDevice, grassPos, 0, grassTexture, snowEffect);
+            this.walls = new _Walls(GraphicsDevice, housePos, 0, grayPaintTexture, snowEffect);
+            this.frontDoor = new _FrontDoor(GraphicsDevice, housePos, 0, woodTexture, snowEffect);
+            this.backDoor = new _BackDoor(GraphicsDevice, housePos, 0, woodTexture, snowEffect);
+            this.sliderWindow = new _SliderWindow(GraphicsDevice, housePos, 0, woodTexture, snowEffect);
+            this.openWindow = new _OpenWindow(GraphicsDevice, housePos, 0, woodTexture, snowEffect);
+            this.roof = new _Roof(GraphicsDevice, housePos, 0, woodTexture, snowEffect);
+            this.moinho1 = new _Moinhos(GraphicsDevice, moinho1Pos, moinho1Angle, redPaintTexture, snowEffect);
+            this.moinho2 = new _Moinhos(GraphicsDevice, moinho2Pos, moinho2Angle, redPaintTexture, snowEffect);
 
-            this.heliceList.Add(new _Helice(GraphicsDevice, helice1Pos, moinho1Angle, woodTexture));
-            this.heliceList.Add(new _Helice(GraphicsDevice, helice2Pos, moinho2Angle, woodTexture));
+            this.heliceList.Add(new _Helice(GraphicsDevice, helice1Pos, moinho1Angle, woodTexture, snowEffect));
+            this.heliceList.Add(new _Helice(GraphicsDevice, helice2Pos, moinho2Angle, woodTexture, snowEffect));
         }
         
         protected override void UnloadContent()
@@ -102,19 +106,29 @@ namespace World
                 this.Exit();
 
             this.camera.Update(gameTime);
-            this.walls.Update(gameTime);
-            this.grass.Update(gameTime);
-            this.frontDoor.Update(gameTime);
-            this.backDoor.Update(gameTime);
-            this.sliderWindow.Update(gameTime);
-            this.openWindow.Update(gameTime);
-            this.roof.Update(gameTime);
-            this.moinho1.Update(gameTime);
-            this.moinho2.Update(gameTime);
+            this.walls.Update(gameTime, counter);
+            this.grass.Update(gameTime, counter);
+            this.frontDoor.Update(gameTime, counter);
+            this.backDoor.Update(gameTime, counter);
+            this.sliderWindow.Update(gameTime, counter);
+            this.openWindow.Update(gameTime, counter);
+            this.roof.Update(gameTime, counter);
+            this.moinho1.Update(gameTime, counter);
+            this.moinho2.Update(gameTime, counter);
 
             foreach (_Helice h in this.heliceList)
             {
-                h.Update(gameTime);
+                h.Update(gameTime, counter);
+            }
+
+            counter += (gameTime.ElapsedGameTime.Milliseconds / 7) * add;
+            if(counter > 0.7f)
+            {
+                add = -0.001f;
+            }
+            else if(counter < 0.1f)
+            {
+                add = 0.001f;
             }
 
             base.Update(gameTime);
@@ -124,6 +138,7 @@ namespace World
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+            GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 
             this.grass.Draw(this.camera);
             this.walls.Draw(this.camera);

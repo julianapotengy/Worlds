@@ -14,14 +14,16 @@ namespace World
         Matrix world;
         VertexPositionTexture[] verts;
         VertexBuffer buffer;
-        BasicEffect effect;
         Color roofColor;
 
         protected Vector3 position;
         private float angle;
         Texture2D texture;
 
-        public _Roof(GraphicsDevice device, Vector3 position, float angle, Texture2D texture)
+        Effect effect;
+        float counter;
+
+        public _Roof(GraphicsDevice device, Vector3 position, float angle, Texture2D texture, Effect effect)
         {
             this.device = device;
             this.world = Matrix.Identity;
@@ -29,6 +31,7 @@ namespace World
             this.position = position;
             this.angle = angle;
             this.texture = texture;
+            this.effect = effect;
 
             this.verts = new VertexPositionTexture[]
             {
@@ -84,25 +87,27 @@ namespace World
 
             this.buffer = new VertexBuffer(this.device, typeof(VertexPositionTexture), this.verts.Length, BufferUsage.None);
             this.buffer.SetData<VertexPositionTexture>(this.verts);
-            this.effect = new BasicEffect(this.device);
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, float counter)
         {
             this.world = Matrix.Identity;
             this.world *= Matrix.CreateRotationY(angle);
             this.world *= Matrix.CreateTranslation(this.position);
+
+            this.counter = counter;
         }
 
         public void Draw(_Camera camera)
         {
             this.device.SetVertexBuffer(this.buffer);
 
-            this.effect.World = this.world;
-            this.effect.View = camera.GetView();
-            this.effect.Projection = camera.GetProjection();
-            this.effect.TextureEnabled = true;
-            this.effect.Texture = texture;
+            this.effect.CurrentTechnique = effect.Techniques["Technique1"];
+            effect.Parameters["World"].SetValue(world);
+            effect.Parameters["View"].SetValue(camera.GetView());
+            effect.Parameters["Projection"].SetValue(camera.GetProjection());
+            effect.Parameters["colorTexture"].SetValue(texture);
+            effect.Parameters["counter"].SetValue(counter);
 
             foreach (EffectPass pass in this.effect.CurrentTechnique.Passes)
             {
