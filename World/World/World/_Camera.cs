@@ -97,23 +97,23 @@ namespace World
         {
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                this.position.X -= (float)Math.Sin(MathHelper.ToRadians(this.angle)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
-                this.position.Z -= (float)Math.Cos(MathHelper.ToRadians(this.angle)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
+                this.position.X -= (float)Math.Sin(MathHelper.ToRadians(this.rotation.Y)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
+                this.position.Z -= (float)Math.Cos(MathHelper.ToRadians(this.rotation.Y)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.D))
             {
-                this.position.X += (float)Math.Sin(MathHelper.ToRadians(this.angle + 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
-                this.position.Z += (float)Math.Cos(MathHelper.ToRadians(this.angle + 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
+                this.position.X += (float)Math.Sin(MathHelper.ToRadians(this.rotation.Y + 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
+                this.position.Z += (float)Math.Cos(MathHelper.ToRadians(this.rotation.Y + 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
-                this.position.X += (float)Math.Sin(MathHelper.ToRadians(this.angle - 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
-                this.position.Z += (float)Math.Cos(MathHelper.ToRadians(this.angle - 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
+                this.position.X += (float)Math.Sin(MathHelper.ToRadians(this.rotation.Y - 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
+                this.position.Z += (float)Math.Cos(MathHelper.ToRadians(this.rotation.Y - 90)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.S))
             {
-                this.position.X += (float)Math.Sin(MathHelper.ToRadians(this.angle)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
-                this.position.Z += (float)Math.Cos(MathHelper.ToRadians(this.angle)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
+                this.position.X += (float)Math.Sin(MathHelper.ToRadians(this.rotation.Y)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
+                this.position.Z += (float)Math.Cos(MathHelper.ToRadians(this.rotation.Y)) * gameTime.ElapsedGameTime.Milliseconds * 0.001f * this.speedT;
             }
         }
     }
