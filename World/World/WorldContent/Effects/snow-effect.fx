@@ -5,10 +5,19 @@ float4x4 Projection;
 // TODO: add effect parameters here.
 float counter;
 Texture colorTexture;
+Texture colorTextureSnow;
 
 sampler colorTextureSampler = sampler_state
 {
 	texture = <colorTexture>;
+	magfilter = LINEAR;
+	minfilter = LINEAR;
+	mipfilter = LINEAR;
+};
+
+sampler colorTextureSnowSampler = sampler_state
+{
+	texture = <colorTextureSnow>;
 	magfilter = LINEAR;
 	minfilter = LINEAR;
 	mipfilter = LINEAR;
@@ -42,7 +51,8 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
     float4 output;
-	output = counter + tex2D(colorTextureSampler, input.textureCoord);
+	output = tex2D(colorTextureSampler, input.textureCoord) * (1 - counter);
+	output = output + (tex2D(colorTextureSnowSampler, input.textureCoord)) * counter;
     return output;
 }
 
@@ -50,8 +60,6 @@ technique Technique1
 {
     pass Pass1
     {
-        // TODO: set renderstates here.
-
         VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_2_0 PixelShaderFunction();
     }

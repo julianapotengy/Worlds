@@ -22,11 +22,12 @@ namespace World
         Random random;
         float rotateZ;
         Texture2D texture;
+        Texture2D snowTexture;
 
         Effect effect;
         float counter;
 
-        public _Helice(GraphicsDevice device, Vector3 position, float angle, Texture2D texture, Effect effect)
+        public _Helice(GraphicsDevice device, Vector3 position, float angle, Texture2D texture, Effect effect, Texture2D snowTexture)
         {
             this.device = device;
             this.world = Matrix.Identity;
@@ -37,6 +38,7 @@ namespace World
             this.speed = (random.Next(1, 5));
             this.rotateZ = 0;
             this.texture = texture;
+            this.snowTexture = snowTexture;
             this.effect = effect;
 
             this.verts = new VertexPositionTexture[]
@@ -119,6 +121,7 @@ namespace World
             effect.Parameters["View"].SetValue(camera.GetView());
             effect.Parameters["Projection"].SetValue(camera.GetProjection());
             effect.Parameters["colorTexture"].SetValue(texture);
+            effect.Parameters["colorTextureSnow"].SetValue(this.snowTexture);
             effect.Parameters["counter"].SetValue(counter);
 
             foreach (EffectPass pass in this.effect.CurrentTechnique.Passes)

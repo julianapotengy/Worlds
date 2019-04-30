@@ -23,7 +23,7 @@ namespace World
 
         public _Camera()
         {
-            this.position = new Vector3(0f,5f,20f);
+            this.position = new Vector3(0f,2f,20f);
             this.target = Vector3.Up;
             this.up = Vector3.Up;
             this.speedT = 20;

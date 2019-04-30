@@ -19,11 +19,12 @@ namespace World
         protected Vector3 position;
         float angle;
         Texture2D texture;
+        Texture2D snowTexture;
 
         Effect effect;
         float counter;
 
-        public _Moinhos(GraphicsDevice device, Vector3 position, float angle, Texture2D texture, Effect effect)
+        public _Moinhos(GraphicsDevice device, Vector3 position, float angle, Texture2D texture, Effect effect, Texture2D snowTexture)
         {
             this.device = device;
             this.world = Matrix.Identity;
@@ -31,6 +32,7 @@ namespace World
             this.position = position;
             this.angle = angle;
             this.texture = texture;
+            this.snowTexture = snowTexture;
             this.effect = effect;
 
             this.verts = new VertexPositionTexture[]
@@ -112,6 +114,7 @@ namespace World
             effect.Parameters["View"].SetValue(camera.GetView());
             effect.Parameters["Projection"].SetValue(camera.GetProjection());
             effect.Parameters["colorTexture"].SetValue(texture);
+            effect.Parameters["colorTextureSnow"].SetValue(this.snowTexture);
             effect.Parameters["counter"].SetValue(counter);
 
             foreach (EffectPass pass in this.effect.CurrentTechnique.Passes)

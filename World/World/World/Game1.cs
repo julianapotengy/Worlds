@@ -34,9 +34,10 @@ namespace World
         Vector3 housePos, grassPos, moinho1Pos, moinho2Pos, helice1Pos, helice2Pos;
         float moinho1Angle, moinho2Angle;
         Texture2D grassTexture, grayPaintTexture, redPaintTexture, woodTexture;
+        Texture2D snowGrassTexture, snowGrayPaintTexture, snowRedPaintTexture, snowWoodTexture;
 
         Effect snowEffect;
-        float counter, time, add;
+        float counter, add;
 
         public Game1()
         {
@@ -69,6 +70,11 @@ namespace World
             this.redPaintTexture = Content.Load<Texture2D>(@"Textures\red-paint-texture");
             this.woodTexture = Content.Load<Texture2D>(@"Textures\wood-texture");
 
+            this.snowGrassTexture = Content.Load<Texture2D>(@"Textures\snow-grass-texture");
+            this.snowGrayPaintTexture = Content.Load<Texture2D>(@"Textures\snow-gray-paint-texture");
+            this.snowRedPaintTexture = Content.Load<Texture2D>(@"Textures\snow-red-paint-texture");
+            this.snowWoodTexture = Content.Load<Texture2D>(@"Textures\snow-wood-texture");
+
             this.snowEffect = Content.Load<Effect>(@"Effects\snow-effect");
             add = 0.001f;
 
@@ -81,18 +87,18 @@ namespace World
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            this.grass = new _Grass(GraphicsDevice, grassPos, 0, grassTexture, snowEffect);
-            this.walls = new _Walls(GraphicsDevice, housePos, 0, grayPaintTexture, snowEffect);
-            this.frontDoor = new _FrontDoor(GraphicsDevice, housePos, 0, woodTexture, snowEffect);
-            this.backDoor = new _BackDoor(GraphicsDevice, housePos, 0, woodTexture, snowEffect);
-            this.sliderWindow = new _SliderWindow(GraphicsDevice, housePos, 0, woodTexture, snowEffect);
-            this.openWindow = new _OpenWindow(GraphicsDevice, housePos, 0, woodTexture, snowEffect);
-            this.roof = new _Roof(GraphicsDevice, housePos, 0, woodTexture, snowEffect);
-            this.moinho1 = new _Moinhos(GraphicsDevice, moinho1Pos, moinho1Angle, redPaintTexture, snowEffect);
-            this.moinho2 = new _Moinhos(GraphicsDevice, moinho2Pos, moinho2Angle, redPaintTexture, snowEffect);
+            this.grass = new _Grass(GraphicsDevice, grassPos, 0, grassTexture, snowEffect, snowGrassTexture);
+            this.walls = new _Walls(GraphicsDevice, housePos, 0, grayPaintTexture, snowEffect, snowGrayPaintTexture);
+            this.frontDoor = new _FrontDoor(GraphicsDevice, housePos, 0, woodTexture, snowEffect, snowWoodTexture);
+            this.backDoor = new _BackDoor(GraphicsDevice, housePos, 0, woodTexture, snowEffect, snowWoodTexture);
+            this.sliderWindow = new _SliderWindow(GraphicsDevice, housePos, 0, woodTexture, snowEffect, snowWoodTexture);
+            this.openWindow = new _OpenWindow(GraphicsDevice, housePos, 0, woodTexture, snowEffect, snowWoodTexture);
+            this.roof = new _Roof(GraphicsDevice, housePos, 0, woodTexture, snowEffect, snowWoodTexture);
+            this.moinho1 = new _Moinhos(GraphicsDevice, moinho1Pos, moinho1Angle, redPaintTexture, snowEffect, snowRedPaintTexture);
+            this.moinho2 = new _Moinhos(GraphicsDevice, moinho2Pos, moinho2Angle, redPaintTexture, snowEffect, snowRedPaintTexture);
 
-            this.heliceList.Add(new _Helice(GraphicsDevice, helice1Pos, moinho1Angle, woodTexture, snowEffect));
-            this.heliceList.Add(new _Helice(GraphicsDevice, helice2Pos, moinho2Angle, woodTexture, snowEffect));
+            this.heliceList.Add(new _Helice(GraphicsDevice, helice1Pos, moinho1Angle, woodTexture, snowEffect, snowWoodTexture));
+            this.heliceList.Add(new _Helice(GraphicsDevice, helice2Pos, moinho2Angle, woodTexture, snowEffect, snowWoodTexture));
         }
         
         protected override void UnloadContent()
