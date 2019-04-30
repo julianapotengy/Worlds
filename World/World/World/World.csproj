@@ -85,6 +85,8 @@
     <Compile Include="_Screen.cs" />
     <Compile Include="_Grass.cs" />
     <Compile Include="_SliderWindow.cs" />
+    <Compile Include="_Tree.cs" />
+    <Compile Include="_TreeManager.cs" />
     <Compile Include="_Walls.cs" />
   </ItemGroup>
   <ItemGroup>

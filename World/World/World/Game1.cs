@@ -31,10 +31,12 @@ namespace World
         List<_Helice> heliceList = new List<_Helice>();
         List<_Moinhos> moinhoList = new List<_Moinhos>();
 
+        _TreeManager treeManager;
+
         Vector3 housePos, grassPos, moinho1Pos, moinho2Pos, helice1Pos, helice2Pos;
         float moinho1Angle, moinho2Angle;
-        Texture2D grassTexture, grayPaintTexture, redPaintTexture, woodTexture;
-        Texture2D snowGrassTexture, snowGrayPaintTexture, snowRedPaintTexture, snowWoodTexture;
+        Texture2D grassTexture, grayPaintTexture, redPaintTexture, woodTexture, treeTexture;
+        Texture2D snowGrassTexture, snowGrayPaintTexture, snowRedPaintTexture, snowWoodTexture, snowTreeTexture;
 
         Effect snowEffect;
         float counter, add;
@@ -69,11 +71,13 @@ namespace World
             this.grayPaintTexture = Content.Load<Texture2D>(@"Textures\gray-paint-texture");
             this.redPaintTexture = Content.Load<Texture2D>(@"Textures\red-paint-texture");
             this.woodTexture = Content.Load<Texture2D>(@"Textures\wood-texture");
+            this.treeTexture = Content.Load<Texture2D>(@"Textures\tree-texture");
 
             this.snowGrassTexture = Content.Load<Texture2D>(@"Textures\snow-grass-texture");
             this.snowGrayPaintTexture = Content.Load<Texture2D>(@"Textures\snow-gray-paint-texture");
             this.snowRedPaintTexture = Content.Load<Texture2D>(@"Textures\snow-red-paint-texture");
             this.snowWoodTexture = Content.Load<Texture2D>(@"Textures\snow-wood-texture");
+            this.snowTreeTexture = Content.Load<Texture2D>(@"Textures\snow-tree-texture");
 
             this.snowEffect = Content.Load<Effect>(@"Effects\snow-effect");
             add = 0.001f;
@@ -99,6 +103,8 @@ namespace World
 
             this.heliceList.Add(new _Helice(GraphicsDevice, helice1Pos, moinho1Angle, woodTexture, snowEffect, snowWoodTexture));
             this.heliceList.Add(new _Helice(GraphicsDevice, helice2Pos, moinho2Angle, woodTexture, snowEffect, snowWoodTexture));
+
+            this.treeManager = new _TreeManager(GraphicsDevice, this, camera, 10, 3, treeTexture, snowEffect, snowTreeTexture);
         }
         
         protected override void UnloadContent()
@@ -126,6 +132,8 @@ namespace World
             {
                 h.Update(gameTime, counter);
             }
+
+            this.treeManager.Update(gameTime, counter);
 
             counter += (gameTime.ElapsedGameTime.Milliseconds / 7) * add;
             if(counter > 0.7f)
@@ -160,6 +168,8 @@ namespace World
             {
                 h.Draw(ref this.camera);
             }
+
+            this.treeManager.Draw(camera);
 
             /*RasterizerState rs = new RasterizerState();
             rs.CullMode = CullMode.None;

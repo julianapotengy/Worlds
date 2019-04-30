@@ -19,7 +19,6 @@ namespace World
 
         Vector3 rotation;
         float speedT, speedR;
-        float angle;
 
         public _Camera()
         {
@@ -28,8 +27,7 @@ namespace World
             this.up = Vector3.Up;
             this.speedT = 20;
             this.speedR = 60;
-            this.angle = 0;
-            this.rotation = new Vector3(-15, 0, 0);
+            this.rotation = new Vector3(0, 0, 0);
 
             this.SetupView(this.position, this.target, this.up);
 
@@ -57,6 +55,11 @@ namespace World
         public Matrix GetProjection()
         {
             return this.projection;
+        }
+
+        public Vector3 GetPosition()
+        {
+            return this.position;
         }
 
         public void Update(GameTime gameTime)
