@@ -22,7 +22,8 @@ namespace World
         Texture2D snowTexture;
         Effect effect;
         _Camera camera;
-        float counter, time, disCamera;
+        float counter, time;
+        public float disCamera;
 
         public _Tree(GraphicsDevice device, Vector3 position, Game game, _Camera camera, Texture2D texture, Effect effect, Texture2D snowTexture)
         {
@@ -58,7 +59,7 @@ namespace World
         {
             this.world = Matrix.Identity;
             this.world *= Matrix.CreateConstrainedBillboard(this.position, camera.GetPosition(), Vector3.Up, new Nullable<Vector3>(), new Nullable<Vector3>());
-            time = 0.05f * gameTime.ElapsedGameTime.Milliseconds;
+            //this.world *= Matrix.CreateBillboard(this.position, camera.GetPosition(), Vector3.Up, new Nullable<Vector3>());
 
             disCamera = Vector3.Distance(this.position, camera.GetPosition());
 

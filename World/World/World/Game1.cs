@@ -32,10 +32,11 @@ namespace World
         List<_Moinhos> moinhoList = new List<_Moinhos>();
 
         _TreeManager treeManager;
+        _HeightMap heightMap;
 
         Vector3 housePos, grassPos, moinho1Pos, moinho2Pos, helice1Pos, helice2Pos;
         float moinho1Angle, moinho2Angle;
-        Texture2D grassTexture, grayPaintTexture, redPaintTexture, woodTexture, treeTexture;
+        Texture2D grassTexture, grayPaintTexture, redPaintTexture, woodTexture, treeTexture, heightMapTexture;
         Texture2D snowGrassTexture, snowGrayPaintTexture, snowRedPaintTexture, snowWoodTexture, snowTreeTexture;
 
         Effect snowEffect;
@@ -48,12 +49,12 @@ namespace World
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 600;
 
-            housePos = new Vector3(0, 0, 0);
+            housePos = new Vector3(40, 0, 0);
             grassPos = new Vector3(0, 0, 0);
-            moinho1Pos = new Vector3(10, 0, -10);
-            moinho2Pos = new Vector3(-10, 0, -10);
-            helice1Pos = new Vector3(8.5f, 7, -7);
-            helice2Pos = new Vector3(-8.5f, 7, -7);
+            moinho1Pos = new Vector3(50, 0, -10);
+            moinho2Pos = new Vector3(30, 0, -10);
+            helice1Pos = new Vector3(48.5f, 7, -7);
+            helice2Pos = new Vector3(31.5f, 7, -7);
 
             moinho1Angle = 320;
             moinho2Angle = -320;
@@ -78,6 +79,8 @@ namespace World
             this.snowRedPaintTexture = Content.Load<Texture2D>(@"Textures\snow-red-paint-texture");
             this.snowWoodTexture = Content.Load<Texture2D>(@"Textures\snow-wood-texture");
             this.snowTreeTexture = Content.Load<Texture2D>(@"Textures\snow-tree-texture");
+
+            this.heightMapTexture = Content.Load<Texture2D>(@"Textures\HeightMap\HMGround-texture");
 
             this.snowEffect = Content.Load<Effect>(@"Effects\snow-effect");
             add = 0.001f;
@@ -104,12 +107,13 @@ namespace World
             this.heliceList.Add(new _Helice(GraphicsDevice, helice1Pos, moinho1Angle, woodTexture, snowEffect, snowWoodTexture));
             this.heliceList.Add(new _Helice(GraphicsDevice, helice2Pos, moinho2Angle, woodTexture, snowEffect, snowWoodTexture));
 
-            this.treeManager = new _TreeManager(GraphicsDevice, this, camera, 10, 3, treeTexture, snowEffect, snowTreeTexture);
+            this.treeManager = new _TreeManager(GraphicsDevice, this, camera, new Vector3(0, 0, 0), 5, 5, treeTexture, snowEffect, snowTreeTexture);
+            this.heightMap = new _HeightMap(GraphicsDevice, this, new Vector3(0, 0, -15), heightMapTexture, grassTexture, snowGrassTexture, 150, 150);
         }
         
         protected override void UnloadContent()
         {
-            
+            heightMap.heightMapTexture.Dispose();
         }
         
         protected override void Update(GameTime gameTime)
@@ -134,6 +138,7 @@ namespace World
             }
 
             this.treeManager.Update(gameTime, counter);
+            this.heightMap.Update(gameTime, counter);
 
             counter += (gameTime.ElapsedGameTime.Milliseconds / 7) * add;
             if(counter > 0.7f)
@@ -147,14 +152,16 @@ namespace World
 
             base.Update(gameTime);
         }
+
+        
         
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.DeepSkyBlue);
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 
-            this.grass.Draw(this.camera);
+            //this.grass.Draw(this.camera);
             this.walls.Draw(this.camera);
             this.frontDoor.Draw(this.camera);
             this.backDoor.Draw(this.camera);
@@ -169,6 +176,7 @@ namespace World
                 h.Draw(ref this.camera);
             }
 
+            this.heightMap.Draw(camera);
             this.treeManager.Draw(camera);
 
             /*RasterizerState rs = new RasterizerState();

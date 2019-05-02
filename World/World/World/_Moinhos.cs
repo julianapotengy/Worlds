@@ -92,7 +92,7 @@ namespace World
                 new VertexPositionTexture(new Vector3(1,8,0),new Vector2(0, 0)), //v2
             };
 
-            this.buffer = new VertexBuffer(this.device, typeof(VertexPositionColor), this.verts.Length, BufferUsage.None);
+            this.buffer = new VertexBuffer(this.device, typeof(VertexPositionTexture), this.verts.Length, BufferUsage.None);
             //this.buffer.SetData<VertexPositionTexture>(this.verts);
         }
 

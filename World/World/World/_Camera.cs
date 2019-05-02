@@ -22,12 +22,12 @@ namespace World
 
         public _Camera()
         {
-            this.position = new Vector3(0f,2f,20f);
+            this.position = new Vector3(70f,5f,60f);
             this.target = Vector3.Up;
             this.up = Vector3.Up;
             this.speedT = 20;
             this.speedR = 60;
-            this.rotation = new Vector3(0, 0, 0);
+            this.rotation = new Vector3(0, 35, 0);
 
             this.SetupView(this.position, this.target, this.up);
 
