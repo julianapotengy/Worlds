@@ -33,13 +33,15 @@ namespace World
 
         _TreeManager treeManager;
         _HeightMap heightMap;
+        _Sea sea;
 
-        Vector3 housePos, grassPos, moinho1Pos, moinho2Pos, helice1Pos, helice2Pos;
+        Vector3 housePos, grassPos, moinho1Pos, moinho2Pos, helice1Pos, helice2Pos, seaPos;
         float moinho1Angle, moinho2Angle;
         Texture2D grassTexture, grayPaintTexture, redPaintTexture, woodTexture, treeTexture, heightMapTexture;
         Texture2D snowGrassTexture, snowGrayPaintTexture, snowRedPaintTexture, snowWoodTexture, snowTreeTexture;
+        Texture2D seaTexture;
 
-        Effect snowEffect;
+        Effect snowEffect, seaEffect;
         float counter, add;
 
         public Game1()
@@ -55,6 +57,7 @@ namespace World
             moinho2Pos = new Vector3(30, 0, -10);
             helice1Pos = new Vector3(48.5f, 7, -7);
             helice2Pos = new Vector3(31.5f, 7, -7);
+            seaPos = new Vector3(0, -1f, 0);
 
             moinho1Angle = 320;
             moinho2Angle = -320;
@@ -81,8 +84,10 @@ namespace World
             this.snowTreeTexture = Content.Load<Texture2D>(@"Textures\snow-tree-texture");
 
             this.heightMapTexture = Content.Load<Texture2D>(@"Textures\HeightMap\HMGround-texture");
+            this.seaTexture = Content.Load<Texture2D>(@"Textures\sea-texture");
 
             this.snowEffect = Content.Load<Effect>(@"Effects\snow-effect");
+            seaEffect = Content.Load<Effect>(@"Effects\sea-effect");
             add = 0.001f;
 
             GraphicsDevice.RasterizerState = RasterizerState.CullNone;
@@ -109,6 +114,7 @@ namespace World
 
             this.treeManager = new _TreeManager(GraphicsDevice, this, camera, new Vector3(0, 0, 0), 5, 5, treeTexture, snowEffect, snowTreeTexture);
             this.heightMap = new _HeightMap(GraphicsDevice, this, new Vector3(0, 0, -15), heightMapTexture, grassTexture, snowGrassTexture, 150, 150);
+            this.sea = new _Sea(seaTexture, GraphicsDevice, seaPos, 0, seaEffect);
         }
         
         protected override void UnloadContent()
@@ -139,6 +145,7 @@ namespace World
 
             this.treeManager.Update(gameTime, counter);
             this.heightMap.Update(gameTime, counter);
+            this.sea.Update(gameTime);
 
             counter += (gameTime.ElapsedGameTime.Milliseconds / 7) * add;
             if(counter > 0.7f)
@@ -152,8 +159,6 @@ namespace World
 
             base.Update(gameTime);
         }
-
-        
         
         protected override void Draw(GameTime gameTime)
         {
@@ -161,6 +166,7 @@ namespace World
             GraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             GraphicsDevice.SamplerStates[1] = SamplerState.LinearClamp;
 
+            this.sea.Draw(camera);
             //this.grass.Draw(this.camera);
             this.walls.Draw(this.camera);
             this.frontDoor.Draw(this.camera);

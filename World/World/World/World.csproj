@@ -85,6 +85,7 @@
     <Compile Include="_Roof.cs" />
     <Compile Include="_Screen.cs" />
     <Compile Include="_Grass.cs" />
+    <Compile Include="_Sea.cs" />
     <Compile Include="_SliderWindow.cs" />
     <Compile Include="_Tree.cs" />
     <Compile Include="_TreeManager.cs" />
