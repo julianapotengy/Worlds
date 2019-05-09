@@ -57,7 +57,7 @@ namespace World
             moinho2Pos = new Vector3(30, 0, -10);
             helice1Pos = new Vector3(48.5f, 7, -7);
             helice2Pos = new Vector3(31.5f, 7, -7);
-            seaPos = new Vector3(0, -1f, 0);
+            seaPos = new Vector3(0, -3f, 0);
 
             moinho1Angle = 320;
             moinho2Angle = -320;
@@ -114,7 +114,7 @@ namespace World
 
             this.treeManager = new _TreeManager(GraphicsDevice, this, camera, new Vector3(0, 0, 0), 5, 5, treeTexture, snowEffect, snowTreeTexture);
             this.heightMap = new _HeightMap(GraphicsDevice, this, new Vector3(0, 0, -15), heightMapTexture, grassTexture, snowGrassTexture, 150, 150);
-            this.sea = new _Sea(seaTexture, GraphicsDevice, seaPos, 0, seaEffect);
+            this.sea = new _Sea(seaTexture, GraphicsDevice, seaPos, 1.58f, seaEffect);
         }
         
         protected override void UnloadContent()

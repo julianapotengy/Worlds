@@ -14,13 +14,15 @@ namespace World
         Matrix world;
         VertexPositionTexture[] verts;
         VertexBuffer buffer;
-        short[] index;
+        short[] indexes;
         IndexBuffer iBuffer;
 
         Vector3 position;
         Effect effect;
         Texture2D seaTexture;
         float angle, time;
+
+        int row, column;
 
         public _Sea(Texture2D seaTexture, GraphicsDevice device, Vector3 position, float angle, Effect seaEffect)
         {
@@ -31,34 +33,56 @@ namespace World
             this.position = position;
             this.angle = angle;
             this.effect = seaEffect;
+            row = 150;
+            column = 150;
 
-            this.verts = new VertexPositionTexture[]
+            this.world = Matrix.Identity;
+            this.world = Matrix.CreateRotationX(angle);
+            this.world *= Matrix.CreateScale(40);
+            this.world *= Matrix.CreateTranslation(this.position);
+
+            this.indexes = new short[(this.row - 1) * (this.column - 1) * 2 * 3];
+
+            int k = 0;
+            for (int i = 0; i < row - 1; i++)
             {
-                new VertexPositionTexture(new Vector3(-200,0,200), Vector2.Zero),
-                new VertexPositionTexture(new Vector3(200,0,200), Vector2.UnitX),
-                new VertexPositionTexture(new Vector3(-200,0,-200), Vector2.UnitY),
-                new VertexPositionTexture(new Vector3(200,0,-200), Vector2.One),
-            };
+                for (short j = 0; j < this.column - 1; j++)
+                {
+                    this.indexes[k++] = (short)(i * this.column + j);
+                    this.indexes[k++] = (short)(i * this.column + (j + 1));
+                    this.indexes[k++] = (short)((i + 1) * this.column + j);
 
-            this.buffer = new VertexBuffer(this.device, typeof(VertexPositionTexture), this.verts.Length, BufferUsage.None);
+                    this.indexes[k++] = (short)(i * this.column + j + 1);
+                    this.indexes[k++] = (short)((i + 1) * this.column + (j + 1));
+                    this.indexes[k++] = (short)((i + 1) * this.column + j);
+                }
+            }
+
+            this.iBuffer = new IndexBuffer(this.device, IndexElementSize.SixteenBits, this.indexes.Length, BufferUsage.None);
+            this.iBuffer.SetData<short>(this.indexes);
+
+            this.verts = new VertexPositionTexture[this.row * this.column];
+
+            for (int i = 0; i < this.row; i++)
+            {
+                for (int j = 0; j < this.column; j++)
+                {
+                    this.verts[i * this.column + j] = new VertexPositionTexture(new Vector3((j - this.column / 2f) / 10f, (-i + this.row / 2f) / 10f, 0),
+                                                                                new Vector2(j / (float)(this.column - 1), i / (float)(this.row - 1)));
+                }
+            }
+
+            this.buffer = new VertexBuffer(this.device,
+                                           typeof(VertexPositionTexture),
+                                           this.verts.Length,
+                                           BufferUsage.None);
             this.buffer.SetData<VertexPositionTexture>(this.verts);
-
-            this.index = new short[]
-            {
-                0,1,2,
-                1,3,2,
-            };
-            this.iBuffer = new IndexBuffer(this.device, IndexElementSize.SixteenBits, this.index.Length, BufferUsage.None);
-            this.iBuffer.SetData<short>(this.index);
         }
 
         public void Update(GameTime gameTime)
         {
-            this.world = Matrix.Identity;
-            this.world *= Matrix.CreateRotationX(angle);
-            this.world *= Matrix.CreateTranslation(this.position);
 
-            this.time += gameTime.ElapsedGameTime.Milliseconds * 0.001f * 4;
+            this.time += gameTime.ElapsedGameTime.Milliseconds * 0.001f * 2;
         }
 
         public void Draw(_Camera camera)
@@ -77,7 +101,8 @@ namespace World
             foreach (EffectPass pass in this.effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                device.DrawUserIndexedPrimitives<VertexPositionTexture>(PrimitiveType.TriangleList, this.verts, 0, this.verts.Length, this.index, 0, 2);
+                //device.DrawUserIndexedPrimitives<VertexPositionTexture>(PrimitiveType.TriangleList, this.verts, 0, this.verts.Length, this.index, 0, 2);
+                device.DrawUserIndexedPrimitives<VertexPositionTexture>(PrimitiveType.TriangleList, this.verts, 0, verts.Length, this.indexes, 0, this.indexes.Length / 3);
             }
         }
     }

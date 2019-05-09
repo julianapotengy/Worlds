@@ -29,7 +29,8 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
     VertexShaderOutput output;
 
-	input.Position.y += sin(time - input.Position.x);
+	//input.Position.y += sin(time - input.Position.x);
+	input.Position.z += sin(time - input.Position.x + input.Position.y)/32;
 
     float4 worldPosition = mul(input.Position, World);
     float4 viewPosition = mul(worldPosition, View);
